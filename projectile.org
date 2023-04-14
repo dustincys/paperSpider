@@ -1,0 +1,42 @@
+* Note
+
+** CCLD Should convert to multiple message                    :paperSpider:
+CLOSED: [2023-04-13 Thu 22:46]
+:LOGBOOK:
+- State "CCLD"       from "TODO"       [2023-04-13 Thu 22:46] \\
+  Not working
+:END:
+[2023-04-03 Mon 20:50] In file: [[file:///home/dustin/data/github/paperSpider/paperSpider/pipelines.py::71][pipelines.py]]
+#+BEGIN_SRC python
+    def _summarize_chatGPT(self, abstract):
+        openai.api_key = self.API_KEY
+        completion = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "system",
+                       "content":"I want you to act as a scientist. I will provide you the abstract section of a paper. You should use your computer science, biology knowledge to summarize it in Chinese. I want you to only reply with bullet points."},
+                      {"role": "user", "content": abstract}])
+        return completion['choices'][0]['message']['content']
+#+END_SRC
+
+** DONE Better to export to github page                       :paperSpider:
+CLOSED: [2023-04-13 Thu 22:51]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2023-04-13 Thu 22:51]
+:END:
+[2023-04-03 Mon 20:52] In file: [[file:///home/dustin/data/github/paperSpider/paperSpider/pipelines.py::85][pipelines.py]]
+#+BEGIN_SRC python
+    def _export_papers(self):
+        with open(self.OUT_FILE_PATH, "w") as outFile:
+            for item in self.papersSet:
+                tempPaper = "标题：{0}\n{1} | {2}\n{3}\n作者：{4}\n\nchatGPT 解析：\n{5}".format(
+                    item['title'],
+                    item['journal'],
+                    item['status'],
+                    item['url'],
+                    item['authors'],
+                    item['content'])
+                outFile.write(tempPaper)
+                outFile.write("\n\n-------------\n\n")
+        pass
+#+END_SRC
+
